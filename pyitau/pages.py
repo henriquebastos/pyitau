@@ -25,28 +25,28 @@ class FirstRouterPage(TextPage):
         """
         Token de autenticação utilizado como cookie nas próximas requisições
         """
-        return re.search("authToken=\\'(.*?)\\';", self._text).group(1)
+        return re.search("authToken=\\'(.*?)\\';", self._text)[1]
 
     @property
     def client_id(self):
-        return re.search(r"var clientId=\'(.*?)\';", self._text).group(1)
+        return re.search(r"var clientId=\'(.*?)\';", self._text)[1]
 
     @property
     def flow_id(self):
-        return re.search("var flowId=\'(.*)\';", self._text).group(1)
+        return re.search("var flowId=\'(.*)\';", self._text)[1]
 
     @property
     def secapdk(self):
-        return re.search(r"\$SECAPDK[\n\r\t\s]*.uidap\(\'(.*?)\'\);", self._text).group(1)
+        return re.search(r"\$SECAPDK[\n\r\t\s]*.uidap\(\'(.*?)\'\);", self._text)[1]
 
     @property
     def secbcatch(self):
-        return re.search(r"\$SECBCATCH[\n\r\t\s]*.uidap\(\'(.*)\'\);", self._text).group(1)
+        return re.search(r"\$SECBCATCH[\n\r\t\s]*.uidap\(\'(.*)\'\);", self._text)[1]
 
     @property
     def perform_request(self):
         pattern = r'router[\n\r\t\s]*.performRequest\([\n\r\t\s]*"(.*?)",'
-        return re.search(pattern, self._text).group(1)
+        return re.search(pattern, self._text)[1]
 
 
 class SecondRouterPage(TextPage):
@@ -57,18 +57,18 @@ class SecondRouterPage(TextPage):
     """
     @property
     def op_sign_command(self):
-        return re.search('__opSignCommand = "(.*?)";', self._text).group(1)
+        return re.search('__opSignCommand = "(.*?)";', self._text)[1]
 
     @property
     def op_maquina_pirata(self):
-        return re.search('__opMaquinaPirata = "(.*?)";', self._text).group(1)
+        return re.search('__opMaquinaPirata = "(.*?)";', self._text)[1]
 
     @property
     def guardiao_cb(self):
         return re.search(
             r'var guardiao_cb = function\(\) {\n\t\t\tloadPage\(\'(.*?)\'\);',
-            self._text
-        ).group(1)
+            self._text,
+        )[1]
 
 
 class PasswordPage(SoupPage):
@@ -132,7 +132,7 @@ class MenuPage(TextPage):
             'urlBox : "(.*?)".*seletorContainer : "#boxContaCorrente",',
             self._text,
             flags=re.DOTALL,
-        ).group(1)
+        )[1]
 
     @property
     def checking_cards_op(self):
@@ -140,7 +140,7 @@ class MenuPage(TextPage):
             r'urlBox : "([^"]+)"[\n\t\r\s,]*seletorContainer : "#boxCartoes",',
             self._text,
             flags=re.DOTALL,
-        ).group(1)
+        )[1]
 
 
 class CheckingAccountMenu(TextPage):
@@ -150,7 +150,7 @@ class CheckingAccountMenu(TextPage):
             'urlBox : "(.*?)".*seletorContainer : ".conteudoBoxContaCorrente",',
             self._text,
             flags=re.DOTALL,
-        ).group(1)
+        )[1]
 
 
 class CheckingCardsMenu(TextPage):
@@ -160,7 +160,7 @@ class CheckingCardsMenu(TextPage):
             r'urlBox : \'([^\']+)\'[\n\r\t\s,]*seletorContainer : "\.conteudoBoxCartoes",',
             self._text,
             flags=re.DOTALL,
-        ).group(1)
+        )[1]
 
 
 class CheckingAccountStatementsPage(SoupPage):
@@ -185,9 +185,9 @@ class CheckingAccountFullStatement(TextPage):
     @property
     def filter_statements_op(self):
         pattern = 'function consultarLancamentosPorPeriodo.*' \
-                  '"periodoConsulta" : parametrosPeriodo.*' \
-                  'url = "(.*?)";'
-        return re.search(pattern, self._text, flags=re.DOTALL).group(1)
+                      '"periodoConsulta" : parametrosPeriodo.*' \
+                      'url = "(.*?)";'
+        return re.search(pattern, self._text, flags=re.DOTALL)[1]
 
 
 class CardDetails(TextPage):
@@ -198,4 +198,4 @@ class CardDetails(TextPage):
             r'{[\n\t\r\s]+urlContingencia = "([^"]+)"',
             self._text,
             flags=re.DOTALL,
-        ).group(1)
+        )[1]
